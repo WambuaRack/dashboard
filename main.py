@@ -1,18 +1,41 @@
 import streamlit as st
-import plotly.express as px 
-import pandas as pd 
+import plotly.express as px
+import pandas as pd
 import os
-import warnings 
+import warnings
+
 warnings.filterwarnings('ignore')
 
-st.set_page_config( page_title="RACKANALYSIS", page_icon=":bar_chart:",layout="wide")
+# Streamlit page configuration
+st.set_page_config(page_title="RACKANALYSIS", page_icon=":bar_chart:", layout="wide")
 st.title(":bar_chart: Rack Store EDA")
-st.markdown('<style> div.block-container{padding-top:1 rem;}</style>',unsafe_allow_html=True)
-fl= st.file_uploader(":file_folder: Upload a file", type= (["csv","txt","xlsx","xls"]))
+st.markdown('<style> div.block-container{padding-top:1rem;}</style>', unsafe_allow_html=True)
+
+# File uploader
+fl = st.file_uploader(":file_folder: Upload a file", type=["csv", "txt", "xlsx", "xls"])
+
 if fl is not None:
-    filename =fl.name
-    st.write(filename)
-    df =pd.read_csv(filename, encoding = "ISO-8859-1")
+    # Determine file type and read accordingly
+    filename = fl.name
+    st.write(f"Uploaded file: {filename}")
+    
+    if filename.endswith('.csv'):
+        df = pd.read_csv(fl, encoding="ISO-8859-1")
+    elif filename.endswith('.xlsx') or filename.endswith('.xls'):
+        df = pd.read_excel(fl, engine='openpyxl')
+    elif filename.endswith('.txt'):
+        df = pd.read_csv(fl, delimiter='\t', encoding="ISO-8859-1")  # Assuming tab-delimited for txt
+    else:
+        st.error("Unsupported file format.")
 else:
-    os.chdir(r"C:\Users\shedr\Desktop\projects\datasets\healthcare-dataset-stroke-data.csv")   
-    df =pd.read_csv("healthcare-dataset-stroke-data.csv", encoding ="ISO-8859-1")
+    # Load default CSV if no file uploaded
+    os.chdir(r"C:\Users\shedr\Desktop\dashboard\dashboard")
+    df = pd.read_csv("dd.csv", encoding="ISO-8859-1")
+
+# Display DataFrame
+col1, col2 = st.columns((2))
+with col1:
+    st.subheader("Data Preview:")
+    st.dataframe(df)
+
+# You can add more EDA visualizations and analysis here
