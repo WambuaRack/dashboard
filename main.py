@@ -38,8 +38,20 @@ with col1:
     st.subheader("Data Preview:")
     st.dataframe(df)
 
-# You can add more EDA visualizations and analysis here
+# EDA Visualizations
 st.subheader("Visualizations")
+
+# Bar Chart: Sales by Category
 if 'Category' in df.columns and 'Sales' in df.columns:
-    fig_bar=px.bar(df, x='Category', y= 'Sales', title='Sales by Category')
+    fig_bar = px.bar(df, x='Category', y='Sales', title='Sales by Category')
     st.plotly_chart(fig_bar)
+
+# Line Chart: Sales over Date
+if 'Date' in df.columns and 'Sales' in df.columns:
+    fig_line = px.line(df, x='Date', y='Sales', title='Sales Over Time')
+    st.plotly_chart(fig_line)
+
+# Scatter Plot: Sales vs Profit
+if 'Sales' in df.columns and 'Profit' in df.columns:
+    fig_scatter = px.scatter(df, x='Sales', y='Profit', title='Sales vs Profit', hover_data=['Category'])
+    st.plotly_chart(fig_scatter)
