@@ -39,3 +39,7 @@ with col1:
     st.dataframe(df)
 
 # You can add more EDA visualizations and analysis here
+st.subheader("Visualizations")
+if 'Category' in df.columns and 'Sales' in df.columns:
+    fig_bar=px.bar(df, x='Category', y= 'Sales', title='Sales by Category')
+    st.plotly_chart(fig_bar)
